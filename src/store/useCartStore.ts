@@ -9,6 +9,7 @@ interface CartState {
   addToCart: (id: number, temp: ColorTemp) => void;
   updateQuantity: (id: number, temp: ColorTemp, delta: number) => void;
   removeFromCart: (id: number, temp: ColorTemp) => void;
+  clearCart: () => void; // <--- ДОДАЛИ
   cartTotal: () => number;
   cartCount: () => number;
 }
@@ -54,6 +55,12 @@ export const useCartStore = create<CartState>()(
           state.cart = state.cart.filter(
             i => !(i.id === id && i.temp === temp)
           );
+        });
+      },
+
+      clearCart: () => {
+        set(state => {
+          state.cart = [];
         });
       },
 

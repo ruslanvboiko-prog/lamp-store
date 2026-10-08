@@ -52,8 +52,8 @@ export default function ProductGrid() {
       {/* PRODUCT GRID */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {paginatedProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
+          {paginatedProducts.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
       ) : (
@@ -68,10 +68,9 @@ export default function ProductGrid() {
           <p className="text-xs text-neutral-600 mt-1">Try adjusting your filters</p>
         </div>
       )}
-        {/* ПАГІНАЦІЯ (відображаємо тільки якщо сторінок більше 1) */}
+        {/* Pagination (displayed only if there are more than 1 pages) */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center mt-10 gap-2">
-            {/* Кнопка Попередня */}
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
@@ -80,12 +79,10 @@ export default function ProductGrid() {
               Prev
             </button>
             
-            {/* Показуємо поточну сторінку */}
             <span className="px-4 py-2 text-sm text-neutral-400">
               Сторінка {currentPage} з {totalPages}
             </span>
 
-            {/* Кнопка Наступна */}
             <button
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages}

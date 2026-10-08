@@ -1,24 +1,29 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface AuthState {
-  isLoggedIn: boolean;           // Is the user logged in
-  username: string | null;       // User's name
-  isAuthModalOpen: boolean;      // Is the authentication modal open
-  login: (name: string) => void; // Function to log in
-  logout: () => void;            // Function to log out
-  setAuthModalOpen: (open: boolean) => void; // Function to open/close the authentication modal
+  isLoggedIn: boolean;
+  username: string | null;
+  isAuthModalOpen: boolean;
+  login: (name: string) => void;
+  logout: () => void;
+  setAuthModalOpen: (open: boolean) => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  isLoggedIn: false,
-  username: null,
-  isAuthModalOpen: false,
-  
-  // When logging in - save the name, set the status to true and immediately close the modal
-  login: (name) => set({ isLoggedIn: true, username: name, isAuthModalOpen: false }),
-  
-  // When logging out - reset all values
-  logout: () => set({ isLoggedIn: false, username: null }),
-  
-  setAuthModalOpen: (open) => set({ isAuthModalOpen: open }),
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      isLoggedIn: false,
+      username: null,
+      isAuthModalOpen: false,
+      
+      login: (name) => set({ isLoggedIn: true, username: name, isAuthModalOpen: false }),
+      logout: () => set({ isLoggedIn: false, username: null }),
+      setAuthModalOpen: (open) => set({ isAuthModalOpen: open }),
+    }),
+    {
+      name: 'loonari-auth', 
+      partialize: (state) => ({ isLoggedIn: state.isLoggedIn, username: state.username }),
+    }
+  )
+);

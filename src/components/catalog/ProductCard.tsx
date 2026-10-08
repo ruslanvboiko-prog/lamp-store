@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 
 interface ProductCardProps {
   product: Product;
+  index: number;
 }
 
 // Placeholder if there is no photo
@@ -24,7 +25,7 @@ function ImagePlaceholder() {
   );
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, index }: ProductCardProps) {
   const { id, title, category, price, image, desc, sale, bestseller } = product;
 
   // Each store is a separate selector
@@ -49,7 +50,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     if (isLoggedIn) {
       toggleWishlist(id);
     } else {
-      setAuthModalOpen(true); // Якщо не залогінений - відкриваємо модалку
+      setAuthModalOpen(true); // If not logged in - open the auth modal
     }
   };
 
@@ -58,12 +59,15 @@ export default function ProductCard({ product }: ProductCardProps) {
       addToCart(id, temp);
       showToast(id);
     } else {
-      setAuthModalOpen(true); // Якщо не залогінений - відкриваємо модалку
+      setAuthModalOpen(true); // If not logged in - open the auth modal
     }
   };
 
   return (
-    <div className="bg-[#14151C] rounded-2xl border border-neutral-800 p-4 flex flex-col justify-between group hover:border-amber-500/30 transition-all duration-300">
+    <div 
+      className="bg-[#14151C] rounded-2xl border border-neutral-800 p-4 flex flex-col justify-between group hover:border-amber-500/30 transition-all duration-300 animate-fade-in-up"
+      style={{ animationDelay: `${index * 150}ms` }}
+    >
       <div>
         {/* IMAGE */}
         <div className="relative aspect-square bg-[#1B1C26] rounded-xl overflow-hidden mb-4 flex items-center justify-center">
