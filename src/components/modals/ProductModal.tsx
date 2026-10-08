@@ -3,6 +3,7 @@ import { products } from '../../data/products';
 import { useUIStore } from '../../store/useUIStore';
 import { useCartStore } from '../../store/useCartStore';
 import { useFilterStore } from '../../store/useFilterStore';
+import { useAuthStore } from '../../store/useAuthStore';
 
 export default function ProductModal() {
   const modalProductId = useUIStore(s => s.modalProductId);
@@ -11,7 +12,10 @@ export default function ProductModal() {
   const addToCart = useCartStore(s => s.addToCart);
   const getProductTemp = useFilterStore(s => s.getProductTemp);
 
-	const showToast = useUIStore(s => s.showToast);
+  const isLoggedIn = useAuthStore(s => s.isLoggedIn);
+  const setAuthModalOpen = useAuthStore(s => s.setAuthModalOpen);
+
+  const showToast = useUIStore(s => s.showToast);
 
   // We find the product by ID
   const product = modalProductId
@@ -38,6 +42,18 @@ export default function ProductModal() {
   if (!product) return null;
 
   const temp = getProductTemp(product.id);
+
+  // Наша нова логіка перевірки авторизації
+  const handleAddToCartClick = () => {
+    if (isLoggedIn) {
+      addToCart(product.id, temp);
+      showToast(product.id);
+      setModalProductId(null);
+    } else {
+      setModalProductId(null);
+      setAuthModalOpen(true); 
+    }
+  };
 
   return (
     <div
@@ -92,11 +108,7 @@ export default function ProductModal() {
           <div className="pt-4 border-t border-neutral-800 flex items-center justify-between">
             <span className="font-space text-2xl font-bold text-amber-500">${product.price}</span>
             <button
-              onClick={() => {
-                addToCart(product.id, temp);
-								showToast(product.id);
-                setModalProductId(null);
-              }}
+              onClick={handleAddToCartClick}
               className="p-3 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl transition-all shadow-lg shadow-amber-500/10 flex items-center justify-center"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

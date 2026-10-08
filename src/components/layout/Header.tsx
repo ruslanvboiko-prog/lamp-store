@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCartStore } from '../../store/useCartStore';
 import { useWishlistStore } from '../../store/useWishlistStore';
 import { useUIStore } from '../../store/useUIStore';
+import { useAuthStore } from '../../store/useAuthStore';
 
 // SVG icons are rendered as separate components — cleaner JSX
 const SunIcon = () => (
@@ -40,6 +41,12 @@ const CartIcon = () => (
   </svg>
 );
 
+const UserIcon = () => (
+  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+  </svg>
+);
+
 // ============ MAIN COMPONENT ============
 export default function Header() {
   // Selector — we take only what is needed
@@ -50,6 +57,11 @@ export default function Header() {
   const setSearchOpen = useUIStore(s => s.setSearchOpen);
   const setCartOpen = useUIStore(s => s.setCartOpen);
   const setWishlistOpen = useUIStore(s => s.setWishlistOpen);
+
+  const isLoggedIn = useAuthStore(s => s.isLoggedIn);
+  const username = useAuthStore(s => s.username);
+  const setAuthModalOpen = useAuthStore(s => s.setAuthModalOpen);
+  const logout = useAuthStore(s => s.logout);
 
   return (
     <header className="w-full sticky top-0 z-40 bg-[#0B0C10]/90 backdrop-blur-md border-b border-neutral-800/80 px-6 py-4">
@@ -73,6 +85,32 @@ export default function Header() {
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-3 sm:gap-4">
 
+          {/* USER / AUTH */}
+          {isLoggedIn ? (
+            // If a person is logged in, we show his name and give him the opportunity to log out
+            <button
+              onClick={logout}
+              title="Click to logout"
+              className="p-2.5 rounded-xl hover:border-red-500/50 hover:text-red-500 text-amber-500 transition-all duration-300 flex items-center gap-2"
+            >
+              <UserIcon />
+              <span className="font-space text-xs font-bold uppercase hidden sm:inline">
+                {username}
+              </span>
+            </button>
+          ) : (
+            // If a person is not logged in, we show the Sign In button
+            <button
+              onClick={() => setAuthModalOpen(true)}
+              className="p-2.5 rounded-xl bg-[#181920] border border-neutral-800 hover:border-amber-500/50 hover:text-amber-500 text-neutral-300 transition-all duration-300 flex items-center gap-2"
+            >
+              <UserIcon />
+              <span className="font-space text-xs font-bold uppercase hidden sm:inline">
+                Sign In
+              </span>
+            </button>
+          )}
+
           {/* SEARCH */}
           <button
             onClick={() => setSearchOpen(true)}
@@ -81,30 +119,32 @@ export default function Header() {
             <SearchIcon />
           </button>
 
-          {/* WISHLIST */}
-          <button
-            onClick={() => setWishlistOpen(true)}
-            className="relative p-2.5 rounded-xl bg-[#181920] border border-neutral-800 hover:border-amber-500/50 hover:text-amber-500 text-neutral-300 transition-all duration-300 flex items-center gap-2"
-          >
-            <HeartIcon />
-            <span className="font-space text-xs font-bold text-white uppercase hidden sm:inline">
-              Favorites
-            </span>
-            {/* Badge — we show it only if there are products */}
-            <Badge count={wishlistCount} color="red" />
-          </button>
-
-          {/* CART */}
-          <button
-            onClick={() => setCartOpen(true)}
-            className="relative p-2.5 rounded-xl bg-[#181920] border border-neutral-800 hover:border-amber-500/50 hover:text-amber-500 text-neutral-300 transition-all duration-300 flex items-center gap-2"
-          >
-            <CartIcon />
-            <span className="font-space text-xs font-bold text-white uppercase hidden sm:inline">
-              Cart
-            </span>
-            <Badge count={cartCount} color="amber" />
-          </button>
+          {isLoggedIn && (
+            <>
+              {/* WISHLIST */}
+              <button
+                onClick={() => setWishlistOpen(true)}
+                className="relative p-2.5 rounded-xl bg-[#181920] border border-neutral-800 hover:border-amber-500/50 hover:text-amber-500 text-neutral-300 transition-all duration-300 flex items-center gap-2"
+              >
+                <HeartIcon />
+                <span className="font-space text-xs font-bold text-white uppercase hidden sm:inline">
+                  Favorites
+                </span>
+                <Badge count={wishlistCount} color="red" />
+              </button>
+              {/* CART */}
+              <button
+                onClick={() => setCartOpen(true)}
+                className="relative p-2.5 rounded-xl bg-[#181920] border border-neutral-800 hover:border-amber-500/50 hover:text-amber-500 text-neutral-300 transition-all duration-300 flex items-center gap-2"
+              >
+                <CartIcon />
+                <span className="font-space text-xs font-bold text-white uppercase hidden sm:inline">
+                  Cart
+                </span>
+                <Badge count={cartCount} color="amber" />
+              </button>
+            </>
+          )}
 
         </div>
       </div>

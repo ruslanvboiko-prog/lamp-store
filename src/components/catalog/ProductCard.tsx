@@ -3,6 +3,7 @@ import { useFilterStore } from '../../store/useFilterStore';
 import { useWishlistStore } from '../../store/useWishlistStore';
 import { useCartStore } from '../../store/useCartStore';
 import { useUIStore } from '../../store/useUIStore';
+import { useAuthStore } from '../../store/useAuthStore';
 
 interface ProductCardProps {
   product: Product;
@@ -37,9 +38,29 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const setModalProductId = useUIStore(s => s.setModalProductId);
 
+  const isLoggedIn = useAuthStore(s => s.isLoggedIn);
+  const setAuthModalOpen = useAuthStore(s => s.setAuthModalOpen);
+
   const isWarm = temp === '2700K';
 
 	const showToast = useUIStore(s => s.showToast);
+
+    const handleWishlistClick = () => {
+    if (isLoggedIn) {
+      toggleWishlist(id);
+    } else {
+      setAuthModalOpen(true); // Якщо не залогінений - відкриваємо модалку
+    }
+  };
+
+  const handleAddToCartClick = () => {
+    if (isLoggedIn) {
+      addToCart(id, temp);
+      showToast(id);
+    } else {
+      setAuthModalOpen(true); // Якщо не залогінений - відкриваємо модалку
+    }
+  };
 
   return (
     <div className="bg-[#14151C] rounded-2xl border border-neutral-800 p-4 flex flex-col justify-between group hover:border-amber-500/30 transition-all duration-300">
@@ -58,7 +79,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* WISHLIST BUTTON */}
           <button
-            onClick={() => toggleWishlist(id)}
+            onClick={handleWishlistClick}
             className="absolute top-3 right-3 p-2 rounded-xl bg-black/50 backdrop-blur-md text-white hover:text-red-500 transition-all active:scale-125"
           >
             <svg
@@ -123,7 +144,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="mt-4 pt-3 border-t border-neutral-800 flex items-center justify-between">
         <span className="font-space text-lg font-bold text-white">${price}</span>
         <button
-          onClick={() => {addToCart(id, temp); showToast(id);}}
+          onClick={handleAddToCartClick}
           className="p-2.5 bg-[#1E202B] hover:bg-amber-500 hover:text-black text-amber-500 rounded-xl border border-neutral-700/60 transition-all flex items-center justify-center"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

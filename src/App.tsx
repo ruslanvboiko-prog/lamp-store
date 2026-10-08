@@ -7,6 +7,7 @@ import SearchModal from './components/modals/SearchModal';
 import ProductModal from './components/modals/ProductModal';
 import CartDrawer from './components/drawers/CartDrawer';
 import WishlistDrawer from './components/drawers/WishlistDrawer';
+import AuthModal from './components/modals/AuthModal';
 import Toast from './components/Toast';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
       <ProductModal />
       <CartDrawer />
       <WishlistDrawer />
+      <AuthModal />
       <Toast />
     </div>
   );

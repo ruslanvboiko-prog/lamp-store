@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 
-// Тип для даних форми
+// Type for the newsletter form
 interface NewsletterForm {
   email: string;
 }
@@ -87,7 +87,7 @@ export default function Footer() {
             </p>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="flex gap-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex gap-2" noValidate>
             <div className="flex-grow">
               <input
                 type="email"

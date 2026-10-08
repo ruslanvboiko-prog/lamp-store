@@ -2,7 +2,7 @@
 
 /* ===== BASE STYLES ===== */
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Open Sans", sans-serif;
   margin: 0;
   background-color: #0B0C10;
 }
@@ -16,7 +16,7 @@ body {
 
 /* ===== CUSTOM FONT CLASS (used as .font-space in JSX) ===== */
 .font-space {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 /* ===== SCROLLBARS ===== */
