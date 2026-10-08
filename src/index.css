@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* ===== BASE STYLES ===== */
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  background-color: #0B0C10;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== CUSTOM FONT CLASS (used as .font-space in JSX) ===== */
+.font-space {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ===== SCROLLBARS ===== */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #2A2C38; border-radius: 10px; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ===== 2700K WARM GLOW ===== */
+.warm-glow {
+  filter: sepia(0.35) saturate(1.4) hue-rotate(-15deg);
+}
+
+/* ===== ANIMATION OF THE SLIDER ===== */
+.hero-slide-transition {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Active slide — visible, in place */
+.slide-active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+/* Exit when swiping forward (→) */
+.slide-out-next {
+  opacity: 0;
+  transform: translateX(-40px) scale(0.98);
+}
+
+/* Entry when swiping forward (→) — new slide comes from the right */
+.slide-in-next {
+  opacity: 0;
+  transform: translateX(40px) scale(0.98);
+}
+
+/* Exit when swiping backward (←) */
+.slide-out-prev {
+  opacity: 0;
+  transform: translateX(40px) scale(0.98);
+}
+
+/* Entry when swiping backward (←) — new slide comes from the left */
+.slide-in-prev {
+  opacity: 0;
+  transform: translateX(-40px) scale(0.98);
+}
+
+button {
+  cursor: pointer;
+}
